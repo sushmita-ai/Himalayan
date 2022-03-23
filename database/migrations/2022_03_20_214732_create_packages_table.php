@@ -36,7 +36,7 @@ class CreatePackagesTable extends Migration
             $table->string('offer_price')->nullable();
             $table->longText('cost_excludes')->nullable();
             $table->longText('cost_includes')->nullable();
-            $table->string('package_type')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });

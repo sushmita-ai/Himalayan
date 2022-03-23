@@ -171,6 +171,9 @@ function getTableHtml($object, $type, $editRoute = null, $deleteRoute = null, $s
         case 'feature':
             return '<label data-uk-tooltip title="' . $object->feature_text . '" class="btn ' . getLabel($object->feature) . '">' . ucwords($object->feature_text) . '</label>';
             break;
+        case 'deal':
+            return '<label data-uk-tooltip title="' . $object->deal_text . '" class="btn ' . getLabel($object->deal) . '">' . ucwords($object->deal_text) . '</label>';
+            break;
         case 'paid':
             if ($object->status == 'active') {
                 return '<label data-uk-tooltip title="' . $object->status_text . '" class="' . getLabel($object->status) . '">' . ucwords($object->paid_text) . '</label>';

@@ -16,17 +16,25 @@ class Package extends Model
     protected $path ='uploads/package';
 
 
-    protected $fillable = ['id', 'title', 'category_id', 'subcategory_id', 'description','sub_description', 'level',
+    protected $fillable = ['id', 'title', 'category_id', 'subcategory_id', 'description','short_description', 'level',
         'meta_title','meta_description','trip_duration', 'max_altitude','feature','is_trending','status','price','offer_price',
-        'cost_excludes', 'image','gallery_images','banner_images', 'cost_includes','package_type'];
+        'cost_excludes', 'image','gallery_images','banner_images', 'cost_includes','package_type','deal','location_map','is_offer','top','special_flags','deleted_at'];
 
 
     protected $appends = [
-        'thumbnail_path', 'image_path', 'banner_path',  'image_path1', 'image_path2'
+        'thumbnail_path', 'image_path', 'banner_path','gallery_path',  'image_path1', 'image_path2'
     ];
     function getStatusTextAttribute()
     {
         return ucwords(str_replace('_', '', $this->status));
+    }
+    function getFeatureTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->feature));
+    }
+    function getdealTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->deal));
     }
 
 
@@ -40,8 +48,14 @@ class Package extends Model
 
     function getBannerPathAttribute()
     {
-        if ($this->banner_image) {
-            return $this->path . '/' . $this->banner_image;
+
+            return $this->path . '/' . $this->banner_images;
+
+    }
+    function getGalleryPathAttribute()
+    {
+        if ($this->gallery_images) {
+            return $this->path . '/' . $this->gallery_images;
         } else {
             return 'assets/images/reliance/Background.jpg';
         }
@@ -69,7 +83,7 @@ class Package extends Model
     }
 
     public function itinerary(){
-        return $this->belongsTo(Itinerary::class);
+        return $this->hasMany(Itinerary::class);
     }
 
 

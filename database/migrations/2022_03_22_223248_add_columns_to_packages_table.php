@@ -14,8 +14,14 @@ class AddColumnsToPackagesTable extends Migration
     public function up()
     {
         Schema::table('packages', function (Blueprint $table) {
-        $table->string('general_images')->after('image');
-        $table->string('banner_images')->after('general_images');
+            $table->string('general_images')->nullable()->after('image');
+            $table->string('banner_images')->nullable()->after('general_images');
+            $table->string('location_map')->nullable();
+            $table->enum('deal',['yes','no'])->nullable()->default('no')->after('status');
+            $table->enum('is_offer',['yes','no'])->nullable()->default('no')->after('deal');
+
+            $table->string('top')->nullable();
+            $table->string('special_flags')->nullable();
         });
     }
 

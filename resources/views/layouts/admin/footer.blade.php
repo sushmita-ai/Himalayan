@@ -24,12 +24,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://parsleyjs.org/dist/parsley.min.js"></script>
 <!--end::Global Javascript Bundle-->
 
 <script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"></script>
 <script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
 <script src="{{asset('assets/admin/js/core/source/App.js')}}"></script>
 <script src="{{ asset('assets/admin/js/libs/bootbox/bootbox.min.js') }}"></script>
+<script src="{{asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js')}}"></script>
+<script src="{{asset('assets/js/style.bundle.js')}}"></script>
+{{--<script src="{{ asset('admin/js/jquery.validate.min.js') }}"></script>--}}
 <!-- csrf setup for ajax -->
 <script type="text/javascript">
     $.ajaxSetup({
@@ -38,8 +43,8 @@
         }
     });
 </script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://parsleyjs.org/dist/parsley.min.js"></script>
+
+
 <script src="{{asset('assets/admin/js/app.js')}}"></script>
 @include('sweetalert::alert')
 

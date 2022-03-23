@@ -30,6 +30,9 @@ class PackageService extends Service
             ->editColumn('feature', function (Package $package) {
                 return getTableHtml($package, 'feature');
             })
+            ->editColumn('deal', function (Package $package) {
+                return getTableHtml($package, 'deal');
+            })
             ->editColumn('is_trending', function (Package $package) {
                 return getTableHtml($package, 'is_trending');
             })
@@ -37,7 +40,7 @@ class PackageService extends Service
                 $editRoute = route('admin.package.edit', $package->id);
                 $deleteRoute = route('admin.package.destroy', $package->id);
                 return getTableHtml($package, 'actions', $editRoute, $deleteRoute);
-            })->rawColumns(['image', 'status', 'actions'])
+            })->rawColumns(['image', 'status', 'deal','feature','actions'])
             ->make(true);
     }
 
@@ -71,7 +74,7 @@ class PackageService extends Service
     }
 
 
-    function uploadFile($file)
+    function uploadFile($file,$type=null)
     {
         if (!empty($file)) {
             $this->uploadPath = 'uploads/package';

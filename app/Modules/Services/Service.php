@@ -20,14 +20,14 @@ abstract class Service
     public function uploadSocialImage($user, $url)
     {
         try{
-            
-           
+
+
             if (!is_dir('uploads'))  mkdir('/uploads');
             $upload_path = '/uploads/user';
             $thumb_path = '/uploads/user/thumb';
-            if (!is_dir( $upload_path ))  mkdir( $upload_path ); 
+            if (!is_dir( $upload_path ))  mkdir( $upload_path );
             $directory = sprintf('%s/thumb', $image->getPath());
-            if (!is_dir($thumb_path)) mkdir($thumb_path); 
+            if (!is_dir($thumb_path)) mkdir($thumb_path);
 
           //  $destination = $this->uploadPath;
 
@@ -36,11 +36,11 @@ abstract class Service
             $path_info = pathinfo($url);                                            //Break the url into paths and base names
             $fileNameToStore = sha1($path_info['basename']) . time() . ".webp";      //the name of the image file to be stored temporarily
             $file_path = public_path( $upload_path . $fileNameToStore );          //path for storing the image file content to the temporary directo
-            $file_thumb_path = public_path( $thumb_path . $fileNameToStore );  
+            $file_thumb_path = public_path( $thumb_path . $fileNameToStore );
             dd($file_path, $file_thumb_path);
             $contents = file_get_contents($url);                                    //get image file content from the url
             $contents = imagecreatefromstring( $contents );
-            
+
             //Save the new image to server/drive
             $img = Image::make($contents);
             $img_save = $img->save($file_path);
@@ -52,7 +52,7 @@ abstract class Service
                 //Save file name in user model
                 $user->image = $fileNameToStore;
                 $user->save();
-                
+
                 //Remove old image and thumbnail
                 if($old_image_file)
                 {
@@ -61,7 +61,7 @@ abstract class Service
                     if(is_file($old_img_path)) unlink($old_img_path);
                     if(is_file($old_thumb_path)) unlink($old_thumb_path);
                 }
-            } 
+            }
         }
         catch(Throwable $e)
         {

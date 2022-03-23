@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
     <link rel="stylesheet" href="{{ asset('assets/admin/css/app.css') }}">
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
     <!--begin::Page Vendor Stylesheets(used by this page)-->
     @yield('page-specific-styles')
     <!--end::Page Vendor Stylesheets-->

@@ -66,8 +66,9 @@
                         <th>Price</th>
                         <th>Trip Duration</th>
                         <th>Status</th>
-{{--                        <th>Feature</th>--}}
-{{--                        <th>Trending</th>--}}
+                        <th>Deal</th>
+                        <th>Feature</th>
+
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -139,6 +140,12 @@
 
                         {
                             "data": "status"
+                        },
+                        {
+                            "data":"deal"
+                        },
+                        {
+                            "data":"feature"
                         },
                         {
                             "data": "actions",

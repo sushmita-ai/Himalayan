@@ -14,10 +14,9 @@ class PackageController extends Controller
 {
     protected $package;
 
-    public function __construct(PackageService $package,Itinerary $itinerary)
+    public function __construct(PackageService $package)
     {
         $this->package = $package;
-        $this->itinerary=$itinerary;
     }
 
     /**
@@ -44,7 +43,8 @@ class PackageController extends Controller
      */
     public function create()
     {
-        return view('admin.package.create');
+        $data['itinerary'] = Itinerary::all();
+        return view('admin.package.create',compact('data'));
     }
 
     /**
@@ -59,28 +59,41 @@ class PackageController extends Controller
         $data = $request->except('image');
         $data['status'] = (isset($data['status']) ? $data['status'] : '') == 'on' ? 'yes' : 'no';
         $data['feature'] = (isset($data['feature']) ? $data['feature'] : '') == 'on' ? 'yes' : 'no';
+        $data['deal'] = (isset($data['deal']) ? $data['deal'] : '') == 'on' ? 'yes' : 'no';
         $data['is_trending'] = (isset($data['is_trending']) ? $data['is_trending'] : '') == 'on' ? 'yes' : 'no';
         return DB::transaction(function () use ($request, $data) {
             if ($package = $this->package->create($data)) {
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $package);
                 }
+//                if ($request->hasFile('banner_images')) {
+//                    $this->uploadFile($request, $package);
+//                }
+//                if ($request->hasFile('gallery_images')) {
+//                    $this->uploadFile($request, $package);
+//                }
+
+
+
                 $p = 0;
-                if(!is_null($request->itinerary_title[0])){
 
-                    foreach ($request->itinerary_title as $it_title) {
-                        $itinerary = new Itinerary();
-                        $itinerary->package_id = $package->id;
-                        $itinerary->itinerary_title = $it_title;
-                        $itinerary->itinerary_description = $request->itinerary_description[$p];
-                        $itinerary->day = $request->day[$p];
-                        $itinerary->save();
-                        $p = $p + 1;
-                    }
-                }
+               if(!is_null($request->itinerary_title[0])) {
+                   foreach ($data['itinerary_title'] as $key => $value) {
+                       if (!empty($value)) {
+                           $itinerary[] = new Itinerary([
+                               'package_id' => $package->id,
+                               'itinerary_title' => $value,
+                               'itinerary_description' => $data['itinerary_description'][$key],
+                               'day' => $data['day'][$key]
+                           ]);
+                           $package = Itinerary::saveMany($itinerary);
+                           $p = $p + 1;
+                       }
 
+                   }
+               }
 
-                Toastr::success('Package created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+               Toastr::success('Package created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
                 return redirect()->route('admin.package.index');
             }
             Toastr::error('Package cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
@@ -107,8 +120,7 @@ class PackageController extends Controller
     public function edit($id)
     {
         $package = $this->package->find($id);
-        $itineraries = $this->itinerary->where('package_id',$package->id)->get();
-        return view('admin.package.edit', compact('package','itineraries'));
+        return view('admin.package.edit', compact('package'));
     }
 
 
@@ -125,6 +137,7 @@ class PackageController extends Controller
         $data = $request->except('image');
         $data['status'] = (isset($data['status']) ? $data['status'] : '') == 'on' ? 'yes' : 'no';
         $data['feature'] = (isset($data['feature']) ? $data['feature'] : '') == 'on' ? 'yes' : 'no';
+        $data['deal'] = (isset($data['deal']) ? $data['deal'] : '') == 'on' ? 'yes' : 'no';
         $data['is_trending'] = (isset($data['is_trending']) ? $data['is_trending'] : '') == 'on' ? 'yes' : 'no';
         return DB::transaction(function () use ($request, $data, $id) {
 
@@ -133,16 +146,7 @@ class PackageController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $package);
                 }
-                $p = 0;
-                foreach ($request->itinerary_title as $it_title) {
-                    $itinerary = new Itinerary();
-                    $itinerary->package_id = $package->id;
-                    $itinerary->itinerary_title = $it_title;
-                    $itinerary->itinerary_description = $request->itinerary_description[$p];
-                    $itinerary->day = $request->day[$p];
-                    $itinerary->save();
-                    $p = $p + 1;
-                }
+
 
 
                 Toastr::success('package updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
@@ -157,18 +161,43 @@ class PackageController extends Controller
 
     function uploadFile(Request $request, $package)
     {
-        $file = $request->file('image');
-        $fileName = $this->package->uploadFile($file);
-        if (!empty($package->image))
-            $this->package->__deleteImages($package);
-        $data['image'] = $fileName;
-        $this->package->updateImage($package->id, $data);
 
-    }
+            $file = $request->file('image');
+            $fileName = $this->package->uploadFile($file);
+            if (!empty($package->image))
+                $this->package->__deleteImages($package);
+            $data['image'] = $fileName;
+            $this->package->updateImage($package->id, $data);
+
+        }
+
+//        if ($type == 'banner_images') {
+//            $file = $request->file('banner_images');
+//            $fileName = $this->package->uploadFile($file);
+//            if (!empty($package->image))
+//                $this->package->__deleteImages($package);
+//            $data['banner_images'] = $fileName;
+//            $this->package->updateImage($package->id, $data);
+//        }
+//    }
+//        if($type=='gallery_images'){
+//            $file = $request->file('gallery_images');
+//            $fileName = $this->package->uploadFile($file);
+//            if (!empty($package->image))
+//                $this->package->__deleteImages($package);
+//            $data['gallery_images'] = $fileName;
+//            $this->package->updateImage($package->id, $data);
+//        }
+
+
+
+
 
     public function destroy($id)
     {
         $this->package->delete($id);
         return redirect()->route('admin.package.index');
     }
+
+
 }
